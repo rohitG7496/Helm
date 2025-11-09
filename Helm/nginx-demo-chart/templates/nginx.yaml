@@ -1,4 +1,4 @@
-----
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,7 +9,7 @@ spec:
   selector: 
     matchLabels:
       app: nginx-demo
-  templates:
+  template:
     metadata: 
       labels: 
         app: nginx-demo
@@ -19,7 +19,6 @@ spec:
           image: {{.Values.image.repository}}:{{.Values.image.tag}}
           ports:
             - containerPort: {{.Values.containerPort}}
-      
 ---
 apiVersion: v1
 kind: Service
@@ -27,10 +26,13 @@ metadata:
   name: nginx-svc
   namespace: {{.Values.namespace}}
 spec:
+  type: {{ .Values.service.type }}
   selector: 
     app: nginx-demo
   ports:
     - protocol: TCP
       port: {{.Values.service.port}}
       targetPort: {{.Values.containerPort}}
-      NodePort: {{.Values.NodePort}}
+{{- if eq .Values.service.type "NodePort" }}
+      nodePort: {{ .Values.NodePort }}
+{{- end }}
