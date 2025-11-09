@@ -1,0 +1,36 @@
+----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-demo
+  namespace: {{.Values.namespace}}
+spec: 
+  replicas: {{.Values.replicaCount}}
+  selector: 
+    matchLabels:
+      app: nginx-demo
+  templates:
+    metadata: 
+      labels: 
+        app: nginx-demo
+    spec: 
+      containers:
+        - name: nginx-demo
+          image: {{.Values.image.repository}}:{{.Values.image.tag}}
+          ports:
+            - containerPort: {{.Values.containerPort}}
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: {{.Values.namespace}}
+spec:
+  selector: 
+    app: nginx-demo
+  ports:
+    - protocol: TCP
+      port: {{.Values.service.port}}
+      targetPort: {{.Values.containerPort}}
+      NodePort: {{.Values.NodePort}}
