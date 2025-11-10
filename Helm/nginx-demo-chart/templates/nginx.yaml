@@ -30,9 +30,6 @@ spec:
   selector: 
     app: nginx-demo
   ports:
-    - protocol: TCP
-      port: {{.Values.service.port}}
-      targetPort: {{.Values.containerPort}}
-{{- if eq .Values.service.type "NodePort" }}
-      nodePort: {{ .Values.NodePort }}
-{{- end }}
+    - port: {{.Values.service.port}}
+      targetPort: 80
+      nodePort: 30800

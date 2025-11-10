@@ -1,6 +1,4 @@
 replicaCount: 1
-containerPort: 80
-NodePort: 30080
 
 image:
   repository: nginx
